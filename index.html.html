@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secret Surprise</title>
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      overflow:hidden;
+      font-family:Arial,sans-serif;
+      color:white;
+      text-align:center;
+      background:linear-gradient(135deg,#ff758c,#ff7eb3,#8e44ad);
+    }
+    .page{
+      display:none;
+      height:100vh;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      padding:25px;
+      box-sizing:border-box;
+    }
+    .active{display:flex;}
+    .box{
+      max-width:750px;
+      padding:30px;
+      border-radius:25px;
+      background:rgba(255,255,255,0.18);
+      box-shadow:0 0 30px rgba(255,255,255,0.7);
+      backdrop-filter:blur(10px);
+      animation:zoom 1s ease;
+    }
+    @keyframes zoom{
+      from{transform:scale(0.7);opacity:0;}
+      to{transform:scale(1);opacity:1;}
+    }
+    h1{
+      font-size:42px;
+      text-shadow:2px 2px 8px #ff0066;
+    }
+    p{
+      font-size:20px;
+      line-height:1.7;
+    }
+    button,input{
+      border:none;
+      border-radius:30px;
+      padding:14px 22px;
+      font-size:17px;
+      margin:8px;
+    }
+    button{
+      background:#ff0066;
+      color:white;
+      cursor:pointer;
+      box-shadow:0 0 15px white;
+    }
+    input{text-align:center;outline:none;}
+    .heart,.confetti,.star{
+      position:absolute;
+      top:-40px;
+      animation:fall linear forwards;
+      pointer-events:none;
+    }
+    @keyframes fall{
+      to{transform:translateY(110vh) rotate(360deg);opacity:0;}
+    }
+    .bigHeart{
+      font-size:90px;
+      animation:beat 1s infinite;
+    }
+    @keyframes beat{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.25);}
+    }
+    .timer{
+      font-size:24px;
+      font-weight:bold;
+      margin:20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page active" id="page1">
+  <div class="box">
+    <h1>Oii Thangoo 💗</h1>
+    <p>Unakku oru secret surprise iruku...</p>
+    <input type="password" id="password" placeholder="Password enter pannuu">
+    <br>
+    <button onclick="checkPassword()">Open Surprise</button>
+    <p id="error"></p>
+    <p>Password hint: Namma name</p>
+  </div>
+</div>
+
+<div class="page" id="page2">
+  <div class="box">
+    <div class="bigHeart">💗</div>
+    <h1>Welcome My Favorite Person 🫶🏻</h1>
+    <p>Nee en life-la vandhadhum ordinary days kooda special-a maariduchu papa.</p>
+    <button onclick="nextPage(3)">Next ✨</button>
+  </div>
+</div>
+
+<div class="page" id="page3">
+  <div class="box">
+    <h1>Typing Message 💌</h1>
+    <p id="typing"></p>
+    <button onclick="nextPage(4)">Next 💗</button>
+  </div>
+</div>
+
+<div class="page" id="page4">
+  <div class="box">
+    <h1>Love Timer ⏳</h1>
+    <p>Nam story start aanadhula irundhu...</p>
+    <div class="timer" id="timer"></div>
+    <button onclick="nextPage(5)">Next 🌙</button>
+  </div>
+</div>
+
+<div class="page" id="page5">
+  <div class="box">
+    <h1>Secret Letter 💌</h1>
+    <p>
+      Oii thangoo...<br><br>
+      Unna pathi sollanum na words pothaadhu.
+      Nee care pannura vidham, pesura vidham, sirikira vidham ellamey enakku romba special.
+      En life-la nee irukkuradhu oru beautiful gift maadhiri.
+      Eppomey happy-a iru. Naan unna romba value panren 💗
+    </p>
+    <button onclick="nextPage(6)">Final Surprise 🎉</button>
+  </div>
+</div>
+
+<div class="page" id="page6">
+  <div class="box">
+    <div class="bigHeart">🫶🏻</div>
+    <h1>Surpriseeeee 🎉💗</h1>
+    <p>Thank you for being my most special person.</p>
+    <p>Every memory with you is priceless 💗</p>
+    <button onclick="startConfetti()">Celebrate 🎆</button>
+  </div>
+</div>
+
+<script>
+let typingStarted=false;
+let heartStarted=false;
+
+function checkPassword(){
+  let pass=document.getElementById("password").value;
+  if(pass==="Niya"){
+    nextPage(2);
+    startHearts();
+    startStars();
+  }else{
+    document.getElementById("error").innerHTML="Wrong password daa 😄";
+  }
+}
+
+function nextPage(num){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+num).classList.add("active");
+
+  if(num===3 && !typingStarted){
+    typingStarted=true;
+    startTyping();
+  }
+  if(num===4){
+    startTimer();
+  }
+}
+
+function startHearts(){
+  if(heartStarted) return;
+  heartStarted=true;
+  setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💗";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(Math.random()*20+20)+"px";
+    h.style.animationDuration=(Math.random()*3+3)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  },300);
+}
+
+function startStars(){
+  setInterval(()=>{
+    let s=document.createElement("div");
+    s.className="star";
+    s.innerHTML="✨";
+    s.style.left=Math.random()*100+"vw";
+    s.style.fontSize=(Math.random()*15+15)+"px";
+    s.style.animationDuration=(Math.random()*4+4)+"s";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),7000);
+  },500);
+}
+
+let msg="Nee enakku romba special. Un kooda pesumbodhu oru calm feeling varum. Un smile, un care, un presence ellamey priceless 💗";
+let i=0;
+
+function startTyping(){
+  let typing=document.getElementById("typing");
+  function type(){
+    if(i<msg.length){
+      typing.innerHTML+=msg.charAt(i);
+      i++;
+      setTimeout(type,55);
+    }
+  }
+  type();
+}
+
+function startTimer(){
+  let startDate=new Date("2025-09-28T02:00:00");
+  setInterval(()=>{
+    let now=new Date();
+    let diff=now-startDate;
+    let days=Math.floor(diff/(1000*60*60*24));
+    let hours=Math.floor((diff/(1000*60*60))%24);
+    let mins=Math.floor((diff/(1000*60))%60);
+    let secs=Math.floor((diff/1000)%60);
+    document.getElementById("timer").innerHTML=
+      days+" days "+hours+" hours "+mins+" minutes "+secs+" seconds 💗";
+  },1000);
+}
+
+function startConfetti(){
+  for(let j=0;j<100;j++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.innerHTML=["💗","✨","🎉","🌸","🫶🏻"][Math.floor(Math.random()*5)];
+    c.style.left=Math.random()*100+"vw";
+    c.style.fontSize=(Math.random()*18+18)+"px";
+    c.style.animationDuration=(Math.random()*2+2)+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+</script>
+
+</body>
+</html>
